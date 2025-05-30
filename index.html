@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espaço das Memórias</title>
+  <style>
+    @font-face {
+      font-family: 'CODE Light';
+      src: url('fonts/CODE Light.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'CODE Bold';
+      src: url('fonts/CODE Bold.ttf') format('truetype');
+    }
+
+    /* Configurações gerais da página */
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'CODE Bold', monospace;
+      background: linear-gradient(to top, #0099ff 0%, #87ceeb 100%);
+      color: rgb(182, 57, 255);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      position: relative;
+    }
+    .beach {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, #fdd9a0 0%, #fdd9a0 30%, #87ceeb 30%, #0099ff 100%);
+    }
+
+
+    /* Barra de navegação */
+    .navbar {
+      background-color: rgba(42, 33, 51, 0.9);
+      padding: 15px 20px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      color: white;
+      font-family: 'CODE Bold', monospace;
+      font-weight: 400;
+      border-radius: 10px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+
+    /* Estilo dos links de navegação */
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 300;
+      padding: 10px 20px;
+      background-color: rgba(42, 33, 51, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .navbar a:hover {
+      background-color: rgba(61, 42, 80, 0.9);
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+
+      @media (max-width: 600px) {
+      .palm-tree[style*="left: 350px"] {
+        left: 10vw !important;
+        bottom: 10vh !important;
+        transform: scale(0.8);
+      }
+      .palm-tree[style*="left: 150px"] {
+        left: 5vw !important;
+        bottom: 5vh !important;
+        transform: scale(0.7);
+      }
+    }
+
+
+    @keyframes twinkle {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Estilo do Sol */
+    #sun {
+      position: absolute;
+      top: 10vh;        /* em vez de 150px */
+      left: 5vw;        /* em vez de 50px */
+      width: 25vw;      /* em vez de 250px */
+      height: 25vw;     /* manter proporção */
+      max-width: 250px; /* limite máximo */
+      max-height: 250px;
+      background: radial-gradient(circle at center, gold 0%, orange 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0px 0px 20px 10px rgba(255, 223, 0, 0.5);
+      animation: sunSpin 10s infinite linear;
+      z-index: 1;
+    }
+
+    /* Nuvens */
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      box-shadow:
+              30px 10px 0px white,
+              60px 15px 0px white,
+              90px 10px 0px white;
+      width: 60px;
+      height: 60px;
+      opacity: 0.8;
+      animation: cloudMove 25s linear infinite;
+      z-index: 0;
+    }
+
+    .cloud:nth-child(1) { top: 150px; left: -200px; animation-delay: 0s; }
+    .cloud:nth-child(2) { top: 180px; left: -300px; animation-delay: 0s; }
+    .cloud:nth-child(3) { top: 100px; left: -400px; animation-delay: 0s; }
+
+    @keyframes cloudMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(200vw); }
+    }
+
+    #sun::before {
+      content: "";
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: repeating-conic-gradient(
+              from 0deg,
+              rgba(255, 215, 0, 0.5) 0deg 10deg,
+              transparent 10deg 20deg
+      );
+      animation: sunRays 10s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes sunRays {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+
+    @keyframes sunSpin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Estilo do Texto de Boas-Vindas */
+    #welcome-text {
+      font-family: 'CODE Bold', monospace;
+      font-weight: 700;
+      font-size: 36px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: colorChange 5s infinite, textPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes colorChange {
+      0%, 100% { color: violet; }
+      25% { color: rgb(128, 0, 85); }
+      50% { color: indigo; }
+      75% { color: rgb(122, 45, 209); }
+    }
+
+    @keyframes textPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    /* Estilo do Texto "Te Amo" e "by Bruno" */
+    #te-amo-container {
+      position: absolute;
+      bottom: 10px;
+      right: -30px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-family: 'CODE Bold', monospace;
+      font-size: 16px;
+      animation: textPulse 3s infinite ease-in-out;
+    }
+
+    #te-amo .te {
+      color: white;
+    }
+
+    #te-amo .amo {
+      color: rgb(128, 0, 85);
+      animation: colorChange 5s infinite;
+    }
+
+    #by-bruno {
+      font-size: 18px;
+      color: white;
+      margin-top: 5px;
+    }
+
+    /* Estilo dos foguetes */
+    #rocket-left {
+      position: absolute;
+      top: 45%; /* Ajustado para mais próximo do título */
+      left: -100px;
+      width: 50px;
+      height: 100px;
+      background-image: url('imagens/juca.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: rocketMoveLeft 8s linear infinite;
+    }
+
+    #rocket-right {
+      position: absolute;
+      bottom: 40%; /* Ajustado para ficar 4 linhas abaixo do texto */
+      right: -100px;
+      width: 50px;
+      height: 100px;
+      background-image: url('imagens/tom.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: rocketMoveRight 8s linear infinite;
+    }
+
+    @keyframes rocketMoveLeft {
+      0% { left: -100px; }
+      100% { left: 100%; }
+    }
+
+    @keyframes rocketMoveRight {
+      0% { right: -100px; }
+      100% { right: 100%; }
+    }
+    .palm-tree {
+      position: absolute;
+      bottom: 50px;
+      left: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .palm-tree-bottom-right {
+      bottom: 0;
+      right: 0;
+      margin: 0 20px 20px 0; /* espaço do canto */
+      left: 250px;
+    }
+
+    .trunk {
+      width: 20px;
+      height: 150px;
+      background: #8b5a2b;
+      border-radius: 10px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    }
+
+    .leaves {
+      position: absolute;
+      top: -10px; /* sobe as folhas até o topo do tronco */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+    }
+
+    .leaf {
+      position: absolute;
+      width: 80px;
+      height: 20px;
+      background: green;
+      border-radius: 50%;
+      transform-origin: left center;
+      box-shadow: 0 0 5px rgba(0, 100, 0, 0.4);
+    }
+
+    .leaf1 { transform: rotate(0deg); }
+    .leaf2 { transform: rotate(45deg); }
+    .leaf3 { transform: rotate(-45deg); }
+    .leaf4 { transform: rotate(90deg); }
+    .leaf5 { transform: rotate(-90deg); }
+    .leaf6 { transform: rotate(-130deg); }
+    .leaf7 { transform: rotate(-180deg); }
+    .leaf8 { transform: rotate(-220deg); }
+
+    .waves {
+      position: absolute;
+      bottom: 270px; /* altura do mar / praia */
+      left: 0;
+      width: 200vw; /* largura maior para animação */
+      height: 80px;
+      background: repeating-radial-gradient(
+              circle at 50% 100%,
+              #0099ff 0,
+              #0099ff 20px,
+              #007acc 21px,
+              #007acc 40px
+      );
+      background-size: 40px 80px;
+      animation: waveMove 6s linear infinite;
+      opacity: 0.6;
+      z-index: 2;
+    }
+
+    @keyframes waveMove {
+      0% {
+        background-position-x: 0;
+      }
+      100% {
+        background-position-x: 160px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div id="sun">CAMILA</div>
+
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+  <div class="cloud"></div>
+
+  <div class="navbar">
+    <a href="index.html">Espaço</a>
+    <a href="fotos.html">Memórias</a>
+    <a href="tempo_juntos.html">Medidor</a>
+  </div>
+  <div id="welcome-text">Bem-vindo a nossa praia de memórias</div>
+  <div id="te-amo-container">
+    <div id="te-amo"><span class="te">Feliz</span> <span class="amo">Aniversário Mila</span></div>
+    <div id="by-bruno">by Bruno <3</div>
+  </div>
+  <div id="rocket-left"></div> <!-- Foguete da esquerda para a direita -->
+  <div id="rocket-right"></div> <!-- Foguete da direita para a esquerda -->
+
+  <div class="waves"></div>
+  <div class="beach"></div>
+
+  <div class="palm-tree" style="bottom: 150px; left: 250px;">
+    <div class="trunk"></div>
+    <div class="leaves">
+      <div class="leaf leaf1"></div>
+      <div class="leaf leaf2"></div>
+      <div class="leaf leaf3"></div>
+      <div class="leaf leaf4"></div>
+      <div class="leaf leaf5"></div>
+      <div class="leaf leaf6"></div>
+      <div class="leaf leaf7"></div>
+      <div class="leaf leaf8"></div>
+    </div>
+  </div>
+  <div class="palm-tree" style="bottom: 50px; left: 70px;">
+    <div class="trunk"></div>
+    <div class="leaves">
+      <div class="leaf leaf1"></div>
+      <div class="leaf leaf2"></div>
+      <div class="leaf leaf3"></div>
+      <div class="leaf leaf4"></div>
+      <div class="leaf leaf5"></div>
+      <div class="leaf leaf6"></div>
+      <div class="leaf leaf7"></div>
+      <div class="leaf leaf8"></div>
+    </div>
+  </div>
+
+  <div class="palm-tree" style="bottom: 200px; left: 800px;">
+    <div class="trunk"></div>
+    <div class="leaves">
+      <div class="leaf leaf1"></div>
+      <div class="leaf leaf2"></div>
+      <div class="leaf leaf3"></div>
+      <div class="leaf leaf4"></div>
+      <div class="leaf leaf5"></div>
+      <div class="leaf leaf6"></div>
+      <div class="leaf leaf7"></div>
+      <div class="leaf leaf8"></div>
+    </div>
+  </div>
+
+  <div class="palm-tree" style="bottom: 200px; left: 1500px;">
+    <div class="trunk"></div>
+    <div class="leaves">
+      <div class="leaf leaf1"></div>
+      <div class="leaf leaf2"></div>
+      <div class="leaf leaf3"></div>
+      <div class="leaf leaf4"></div>
+      <div class="leaf leaf5"></div>
+      <div class="leaf leaf6"></div>
+      <div class="leaf leaf7"></div>
+      <div class="leaf leaf8"></div>
+    </div>
+  </div>
+
+    <div class="palm-tree" style="bottom: 80px; left: 1100px;">
+      <div class="trunk"></div>
+      <div class="leaves">
+        <div class="leaf leaf1"></div>
+        <div class="leaf leaf2"></div>
+        <div class="leaf leaf3"></div>
+        <div class="leaf leaf4"></div>
+        <div class="leaf leaf5"></div>
+        <div class="leaf leaf6"></div>
+        <div class="leaf leaf7"></div>
+        <div class="leaf leaf8"></div>
+      </div>
+
+  </div>
+
+    <div class="palm-tree" style="bottom: 80px; left: 650px;">
+      <div class="trunk"></div>
+      <div class="leaves">
+        <div class="leaf leaf1"></div>
+        <div class="leaf leaf2"></div>
+        <div class="leaf leaf3"></div>
+        <div class="leaf leaf4"></div>
+        <div class="leaf leaf5"></div>
+        <div class="leaf leaf6"></div>
+        <div class="leaf leaf7"></div>
+        <div class="leaf leaf8"></div>
+      </div>
+    </div>
+
+  <div class="palm-tree" style="bottom: 80px; left: 1600px;">
+    <div class="trunk"></div>
+    <div class="leaves">
+      <div class="leaf leaf1"></div>
+      <div class="leaf leaf2"></div>
+      <div class="leaf leaf3"></div>
+      <div class="leaf leaf4"></div>
+      <div class="leaf leaf5"></div>
+      <div class="leaf leaf6"></div>
+      <div class="leaf leaf7"></div>
+      <div class="leaf leaf8"></div>
+    </div>
+  </div>
+
+
+
+</body>
+</html>
